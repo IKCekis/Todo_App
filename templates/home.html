@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Todos</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <style>
+        html{
+            background-image: url('/static/home-background.png');
+            background-size: cover;
+        }
+    </style>
+<body>
+    <header>
+        <div id="navbar">
+            <div class="logo">{{title}}</div>
+            <ul>
+                <li>
+                    <a class="navbtn" href="/home">Home</a>
+                    <a class="navbtn" href="/todos">Todos</a>
+                    <div class="dropdown">
+                        <span class="navbtn">Account</span>
+                        <div class="dropdown-content">
+                            {% if current_user.is_authenticated %}
+                            <a href="/logout">Logout</a>
+                            <a href="#">Details</a>
+                            <a href="#">Dashboard</a>
+                            {% else %}
+                            <a href="/login">Login</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <a class="navbtn" href="www.github.com">Github</a>
+                </li>
+            </ul>
+        </div>
+    </header>
+    <div class="banner container">
+        <div class="banner-logo">
+            <h1 class="tittle">TODO</h1>
+        </div>
+        <div class="banner-text">
+            <p>TODO is an open source python web application, that is aiming to help you to gain a new habit. </p>
+        </div>
+    </div>
+        <br>
+    </div>
+</body>
+</html>

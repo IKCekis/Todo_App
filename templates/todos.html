@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block content %}
+    <form action="" method="post">
+    <div class="container">
+        <input class="todo" type="text" placeholder="Subject of todo" name="subject">
+        <button class="btn" type="submit">Add</button>
+    </div>
+    </form>
+    <ul>
+            <li>
+                {% for todo in todos %}
+                    <div class="container framebox">
+                        <a class="btn btn-default" href="{{ url_for('details', site_id=todo.id) }}">{{ todo.subject }}</a>
+                        <iframe class="frame" src="{{ url_for('details_frame', site_id=todo.id) }}" frameborder="0"></iframe>
+                    </div>
+                {% endfor %}
+            </li>
+    </ul>
+
+{% endblock %}

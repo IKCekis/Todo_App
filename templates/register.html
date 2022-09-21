@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container">
+      <h1>Registration</h1>
+      <br>
+      <form action="" method="post">
+        <div class="container">
+          <input class="login" type="text" placeholder="Username" name="username" value="{{
+            request.form.username }}">
+           <input class="login" type="password" placeholder="Password" name="password" value="{{
+            request.form.password }}">
+          <input class="login" type="email" placeholder="Email" name="email" value="{{
+            request.form.email }}">
+          <button type="submit" class="btn btn-default">Submit</button>
+          <a class="btn btn-default" href="/login">Login</a>
+        </div>
+      </form>
+      {% if error %}
+        <p class="error"><strong>Error:</strong> {{ error }}
+      {% endif %}
+    </div>
+{% endblock %}
