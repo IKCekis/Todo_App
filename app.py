@@ -9,14 +9,14 @@ from datetime import datetime, date
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SECRET_KEY'] = 'thisisasecretkey'
+app.config['SECRET_KEY'] = '<write_secret_key_here>' #change secret key
 db = SQLAlchemy(app)
 
 login_manager = LoginManager()
 login_manager.login_view = "login"
 login_manager.init_app(app)
 
-today = datetime.today().date()
+today = datetime.today().date() #get date
 print(today)
 
 months = ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"]
@@ -53,10 +53,12 @@ def unique(list1):
     for x in list1:
         # check if exists in unique_list or not
         if x not in unique_list:
+        	#if there is not the same element in list append it
             unique_list.append(x)
 
     return unique_list
 
+#ORM
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
@@ -65,7 +67,7 @@ class User(db.Model, UserMixin):
 
     def __repr__(self):
         return '<User %r>' % self.username
-
+#ORM
 class Todos(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, nullable=False)
@@ -75,9 +77,9 @@ class Todos(db.Model):
 
 db.create_all()
 
+#Home page
 @app.route("/")
 def index():
-
     return render_template('home.html', date=today)
 
 @app.route("/home")
@@ -89,6 +91,8 @@ def home():
 def load_user(user_id):
     return User.query.get(int(user_id))
 
+
+#Profile page
 @app.route("/profile", methods=['GET', 'POST'])
 @login_required
 def profile():
@@ -96,6 +100,7 @@ def profile():
     name = current_user.username
     return render_template('profile.html', date=today, name=name, title=title)
 
+#Todos page
 @app.route("/todos", methods=['GET', 'POST'])
 @login_required
 def todos():
@@ -116,7 +121,7 @@ def todos():
 
     return render_template('todos.html', date=today, len=len(todos), todos=todos, title=title)
 
-
+#Todo detailed page
 @app.route(f"/todos/<int:site_id>", methods=['GET', 'POST'])
 @login_required
 def details(site_id=None):
@@ -151,6 +156,7 @@ def details(site_id=None):
 
     print(dates[0][0])
     return render_template('details.html', date=today, title=title, len=len(months), dates=dates, months=months, day=day_of_year, checked=unique_list, subject=subject, todo_id=site_id)
+
 
 @app.route(f"/todosframe/<int:site_id>", methods=['GET', 'POST'])
 @login_required
@@ -187,6 +193,7 @@ def details_frame(site_id=None):
     return render_template('details_frame.html', date=today, title=title, len=len(months), dates=dates, months=months, day=day_of_year, checked=unique_list, subject=subject, todo_id=site_id)
 
 
+#Delete
 @app.route("/delete/<int:site_id>", methods=['GET', 'POST'])
 @login_required
 def delete(site_id=None):
@@ -197,6 +204,7 @@ def delete(site_id=None):
             db.session.commit()
         return redirect(url_for('todos'))
 
+#Login page
 @app.route("/login", methods=['GET', 'POST'])
 def login():
     title = "Login"
@@ -213,16 +221,17 @@ def login():
             #success = f"You are welcome {request.form['username']}"
         else:
             error = 'Invalid username/password'
-    # the code below is executed if the request method
-    # was GET or the credentials were invalid
+    # the code below is executed if the request method was GET or the credentials were invalid
     return render_template('login.html', date=today, error=error, success=success, title=title)
 
+#Logout
 @app.route("/logout", methods=['GET', 'POST'])
 @login_required
 def logout():
     logout_user()
     return redirect('login')
 
+#Register
 @app.route("/register", methods=['GET', 'POST'])
 def register():
     title = "Register"
